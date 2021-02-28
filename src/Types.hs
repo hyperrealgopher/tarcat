@@ -34,7 +34,7 @@ instance Show KeySummary where
 
 
 data TapeEncryptionKey =
-  TapeEncryptionKey { _id :: Int
+  TapeEncryptionKey { _keyId :: Int-- FIXME: rename to keyId
                     , _name :: Text
                     , _contents :: Text
                     , _keyNotes :: Maybe Notes
@@ -44,7 +44,7 @@ data TapeEncryptionKey =
 instance Show TapeEncryptionKey where
   show key = "Key #" ++ id' ++ " (\"" ++ name' ++ "\")" ++ notes'
    where
-    id' = show $ _id key
+    id' = show $ _keyId key
     name' = unpack $ _name key
 
     notes' = case _keyNotes key of

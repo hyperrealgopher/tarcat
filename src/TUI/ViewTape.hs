@@ -72,7 +72,7 @@ mkForm t = do
         -- The initial key position in the list
         initialKeySelectionState = initialTapeInfo-- should actually take Tape to select
     keys <- pullAllKeys
-    let keysVectorFunc _ = Vector.fromList (map (\x -> KeySummary (_id x) (_name x)) keys)
+    let keysVectorFunc _ = Vector.fromList (map (\x -> KeySummary (_keyId x) (_name x)) keys)
         keySelectionField =
           listField keysVectorFunc key listDrawElement 4 KeyField
     let f = newForm [ label "Barcode" @@=

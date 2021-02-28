@@ -1,6 +1,7 @@
 -- | Handle events for the view which lists keys.
 module TUI.Handle.ListKeys where
 
+import Control.Monad.IO.Class (liftIO)
 import Control.Monad (void)
 import Data.Maybe (fromMaybe)
 -- #if !(MIN_VERSION_base(4,11,0))
@@ -20,7 +21,19 @@ import Brick.Widgets.Core (hLimit, str, vBox, vLimit, withAttr, (<+>))
 import qualified Brick.Widgets.List as L
 import qualified Data.Vector as Vec
 
+import Catalog
+import qualified TUI.ViewKey
 import TUI.Types
+
+
+
+switchToViewKey l = do
+  let listSelection = case L.listSelected l of
+                        Just n -> n
+                        Nothing -> error "should be impossible!"
+  key' <- pullKey (listSelection + 1)
+  let form = TUI.ViewKey.mkKeyForm key' key' :: ViewKeyState
+  pure $ ViewKey form
 
 
 keyHandleEvent :: ListKeysState -> T.BrickEvent Name e -> T.EventM Name (T.Next (AppMode))
@@ -37,6 +50,8 @@ keyHandleEvent l (T.VtyEvent e) =
                 Just i  -> M.continue $ ListKeys $ L.listRemove i l
 
         V.EvKey V.KEsc [] -> M.halt $ ListKeys l
+
+        V.EvKey V.KEnter [] -> liftIO (switchToViewKey l) >>= M.continue
 
         ev -> M.continue =<< (fmap ListKeys $ (L.handleListEventVi L.handleListEvent) ev l)
     where

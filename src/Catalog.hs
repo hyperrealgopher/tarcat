@@ -6,6 +6,7 @@ module Catalog
   , updateTape
   , addKey
   , pullAllKeys
+  , pullKey
   )
 where
 
@@ -72,6 +73,18 @@ pullAllKeys = do
   -- shouldn't i be able to set the type here to IO [EncryptionKey] with the right class instance? FIXME
   rows <- query_ conn "SELECT id, name, contents, notes FROM encrypt_keys" :: IO [TapeEncryptionKey]
   pure rows
+
+
+pullKey :: Int -> IO TapeEncryptionKey
+pullKey id' = do
+  conn <- open databaseFileName
+  rows <- query conn "SELECT id, name, contents, notes FROM encrypt_keys WHERE id = ?" (Only id') :: IO [TapeEncryptionKey]
+  case rows of
+    key:[] -> pure $ key
+    [] -> error "Key does not exist!"
+    _ -> error "too many matches! should be impossible!"
+
+
 
 
 -- TODO: update existing encryption key information based on ID

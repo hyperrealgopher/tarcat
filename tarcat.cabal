@@ -64,6 +64,8 @@ library
     TUI.Handle.ListKeys
     TUI.Draw.ListKeys
 
+    TUI.ViewKey
+
   -- Modules included in this library but not exported.
   -- other-modules:
 

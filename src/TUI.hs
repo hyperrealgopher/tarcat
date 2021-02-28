@@ -28,9 +28,13 @@ import qualified Data.Vector as Vec
 import Catalog
 import Types
 import TUI.Types
+
 import TUI.Handle.ListKeys
 import TUI.Draw.ListKeys
 import TUI.Model.ListKeys
+
+import TUI.ViewKey
+
 import TUI.ViewTape (viewTapeHandleEvent, viewTapeDraw)
 import TUI.Types (Name, AppMode(..))
 import TUI.Handle.Search (searchHandleEvent)
@@ -50,6 +54,7 @@ appHandleEventDependingMode appMode ev
 appHandleEventDependingMode (Search searchState) ev = searchHandleEvent searchState ev
 appHandleEventDependingMode (ViewTape viewTapeState) ev = viewTapeHandleEvent viewTapeState ev
 appHandleEventDependingMode (ListKeys keyState) ev = keyHandleEvent keyState ev
+appHandleEventDependingMode (ViewKey keyState) ev = viewKeyHandleEvent keyState ev
 
 
 appDrawDependingMode :: AppMode -> [Widget Name]
@@ -58,6 +63,7 @@ appDrawDependingMode appMode =
     (Search searchState) -> searchDraw searchState
     (ViewTape viewTapeState) -> viewTapeDraw viewTapeState
     (ListKeys keyState) -> keyDraw keyState
+    (ViewKey keyState) -> viewKeyDraw keyState
 
 
 cursorHack
@@ -70,6 +76,7 @@ cursorHack appMode =
     (ViewTape viewTapeState) -> focusRingCursor formFocus viewTapeState
     -- FIXME
     (ListKeys keyState) -> showCursorNamed KeyBrickList
+    (ViewKey viewKeyState) -> focusRingCursor formFocus viewKeyState
 
 
 theMap :: AttrMap

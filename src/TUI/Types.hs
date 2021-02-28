@@ -16,6 +16,8 @@ customAttr = L.listSelectedAttr <> "custom"
 
 type ViewTapeState = Form Tape V.Event Name
 
+type ViewKeyState = Form TapeEncryptionKey V.Event Name
+
 type SearchState = Form Tape V.Event Name
 
 -- FIXME: implement so you can see which tapes are using? KeyViewState... lets you save to location too.
@@ -24,11 +26,15 @@ type ListKeysState = L.List Name String
 
 -- FIXME: "Key" should be "KeyList" or "KeySearch"
 -- | The screens within the app called "modes."
-data AppMode = Search SearchState | ViewTape ViewTapeState | ListKeys ListKeysState
+data AppMode = Search SearchState | ViewTape ViewTapeState | ListKeys ListKeysState | ViewKey ViewKeyState
 
 -- NOTE: these are field names
 data Name = BarcodeField
           | NotesField
+          | KeyNotesField
           | KeyField
           | KeyBrickList -- FIXME: better name
+          | IdField
+          | NameField
+          | ContentsField
           deriving (Eq, Ord, Show)
